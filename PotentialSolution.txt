@@ -1,0 +1,10 @@
+Possibly do yellow speration on gray? But that solution won't work in real world?
+So:
+Instead of doing left & right split. Use horizontal segments on y axis (up/down)
+The lane lines should have some reasonable distance 550 pixels apart above front of car.
+And have certain m & b combo in Hough space at 1st horiz seg forming 
+m = +45~ degree & -45~ on right & b = 150 & 840 
+This will eliminate false lines like center divider
+at 2nd seqment will have similar m & b characteristics.
+Plus, attempt to Add Loess (piecewise linear) to the lane marks as well?
+Also, eliminate regions when horizonal lines are encountered  = hood or hoizon or another car

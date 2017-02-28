@@ -1,69 +1,23 @@
-#**Finding Lane Lines on the Road** 
-<img src="laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+#**This Write up is to reflect the reviewer's last point
+Reflection describes the current pipeline, identifies its potential shortcomings and suggests possible improvements. There is no minimum length. Writing in English is preferred but you may use any language.
+Below is redo:
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+*provided me with a theoretical analysis of your algorithm in the "Reflections" section, and what changes could be made to make the API more robust with various environmental factors :) Just a few sentences would suffice.
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
+Theoretical:
+1) Transformed the original video to grayscale then 
+2) appied Gaussian blurr (Reviewer suggested Kernel_size of 3 or less) 
+3) sent the result into Canny Edge detection 
+4) Masked Area of interest and cut them to left & right to find each lane seperately, which allowed me to bolder & give more custom approach to the dashed lines right and solid left lanes on the center.
+5) With Hough space
 
-**Step 1:** Getting setup with Python
-
-To do this project, you will need Python 3 along with the numpy, matplotlib, and OpenCV libraries, as well as Jupyter Notebook installed. 
-
-We recommend downloading and installing the Anaconda Python 3 distribution from Continuum Analytics because it comes prepackaged with many of the Python dependencies you will need for this and future projects, makes it easy to install OpenCV, and includes Jupyter Notebook.  Beyond that, it is one of the most common Python distributions used in data analytics and machine learning, so a great choice if you're getting started in the field.
-
-Choose the appropriate Python 3 Anaconda install package for your operating system <A HREF="https://www.continuum.io/downloads" target="_blank">here</A>.   Download and install the package.
-
-If you already have Anaconda for Python 2 installed, you can create a separate environment for Python 3 and all the appropriate dependencies with the following command:
-
-`>  conda create --name=yourNewEnvironment python=3 anaconda`
-
-`>  source activate yourNewEnvironment`
-
-**Step 2:** Installing OpenCV
-
-Once you have Anaconda installed, first double check you are in your Python 3 environment:
-
-`>python`    
-`Python 3.5.2 |Anaconda 4.1.1 (x86_64)| (default, Jul  2 2016, 17:52:12)`  
-`[GCC 4.2.1 Compatible Apple LLVM 4.2 (clang-425.0.28)] on darwin`  
-`Type "help", "copyright", "credits" or "license" for more information.`  
-`>>>`   
-(Ctrl-d to exit Python)
-
-run the following commands at the terminal prompt to get OpenCV:
-
-`> pip install pillow`  
-`> conda install -c https://conda.anaconda.org/menpo opencv3`
-
-then to test if OpenCV is installed correctly:
-
-`> python`  
-`>>> import cv2`  
-`>>>`  
-(Ctrl-d to exit Python)
-
-**Step 3:** Installing moviepy  
-
-We recommend the "moviepy" package for processing video in this project (though you're welcome to use other packages if you prefer).  
-
-To install moviepy run:
-
-`>pip install moviepy`  
-
-and check that the install worked:
-
-`>python`  
-`>>>import moviepy`  
-`>>>`  
-(Ctrl-d to exit Python)
-
-**Step 4:** Opening the code in a Jupyter Notebook
-
-You will complete this project in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out <A HREF="https://www.packtpub.com/books/content/basics-jupyter-notebook-and-python" target="_blank">Cyrille Rossant's Basics of Jupyter Notebook and Python</A> to get started.
-
-Jupyter is an ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, run the following command at the terminal prompt (be sure you're in your Python 3 environment!):
-
-`> jupyter notebook`
-
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
-# CarND-LaneLines-P1
+Improvements in the future?
+Possibly preprocess yellow speration (vias color separation), which were utilized on later project to imporve results. We know for a fact that this works.
+Instead of doing left & right split, as I did. Use horizontal segments on y axis (up/down)? This was also utilized in last project when searching cars as sliding windows.
+The lane lines should have some reasonable distance 550 pixels apart above front of car. Also utilized in advanced lane finding example.
+And have certain m & b combo in Hough space at 1st horiz seg forming 
+m = +45~ degree & -45~ on right & b = 150 & 840 
+This will eliminate false lines like center divider or false lines
+at 2nd seqment will have similar m & b characteristics.
+Plus, attempt to Add Loess (piecewise linear) to the lane marks as well? This is something I really would like to try, but this would require more familiarity with cv2.
+Also, eliminate regions when horizonal lines are encountered  = hood or hoizon. This mask was also utilized in last project.
